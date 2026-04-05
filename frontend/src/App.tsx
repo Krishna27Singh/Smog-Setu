@@ -12,6 +12,7 @@ import Dispatch from "@/pages/Dispatch";
 import Inventory from "@/pages/Inventory";
 import Scanner from "@/pages/Scanner";
 import Volunteer from "@/pages/Volunteer";
+import Register from "@/pages/Register";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,7 +26,8 @@ const App = () => (
         <AuthProvider>
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/register" element={<Register />} />
+<Route path="/" element={<Navigate to="/register" replace />} />
             <Route
               element={
                 <ProtectedRoute>
