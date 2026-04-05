@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { onAuthStateChanged, signInWithEmailAndPassword, signOut, type User } from "firebase/auth";
+import { onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, deleteUser, type User } from "firebase/auth";
+
 import { auth } from "@/lib/firebase";
 
 interface AuthContextType {
@@ -7,6 +8,8 @@ interface AuthContextType {
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  register: (email: string, password: string) => Promise<void>;
+  deleteUser: (user: User) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -31,8 +34,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await signOut(auth);
   };
 
+  const register = async (email: string, password: string) => {
+    await createUserWithEmailAndPassword(auth, email, password);
+  };
+
+  const deleteUserFn = async (user: User) => {
+    try {
+      await deleteUser(user);
+    } catch (error) {
+      console.error("Failed to delete user:", error);
+      // Don't re-throw - cleanup is best-effort
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, register, deleteUser: deleteUserFn }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,6 +1,6 @@
 import { auth } from "@/lib/firebase";
 
-const BASE_URL = "http://localhost:5000/api";
+const BASE_URL = "http://localhost:3003/api";
 
 async function getAuthHeaders(): Promise<Record<string, string>> {
   const headers: Record<string, string> = { "Content-Type": "application/json" };
@@ -74,6 +74,12 @@ export const api = {
     request<{ task: TaskItem; match: unknown }>("/tasks/match", {
       method: "POST",
       body: JSON.stringify({ taskId }),
+    }),
+
+  registerNgo: (name: string) =>
+    request("/ngos/register", {
+      method: "POST",
+      body: JSON.stringify({ name }),
     }),
 
   // Scanner

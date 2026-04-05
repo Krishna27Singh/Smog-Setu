@@ -6,18 +6,23 @@ const mongoose = require("mongoose");
 const inventoryRoutes = require("./routes/inventory");
 const taskRoutes = require("./routes/tasks");
 const scannerRoutes = require("./routes/scanner");
+const ngoRoutes = require("./routes/ngos");
 
 const app = express();
 const PORT = process.env.PORT || 3003;
 
 // Middleware
-app.use(cors({ origin: true }));
+app.use(cors({ 
+  origin: 'http://localhost:8080', 
+  credentials: true 
+}));
 app.use(express.json({ limit: "20mb" }));
 
 // Routes
 app.use("/api/inventory", inventoryRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/scanner", scannerRoutes);
+app.use("/api/ngos", ngoRoutes);
 
 app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 
